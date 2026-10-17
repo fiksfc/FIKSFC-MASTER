@@ -1,89 +1,96 @@
-from datetime import date, time, datetime
-import random, json, os
+from datetime import datetime
+import random
+import json
+import os
+import urllib.parse
+import webbrowser
+
+MIND_FILE = "fik_mind.json"
+
+def load_mind():
+    if os.path.exists(MIND_FILE):
+        try:
+            with open(MIND_FILE, "r") as f:
+                return json.load(f)
+        except:
+            return []
+    return []
 
 def save_to_mind(you_said, assistant_said):
-    file = "cyber_project/memory.json"
-    if not os.path.exists("cyber_project"):
-        os.makedirs("cyber_project")
-    memories = []
-    if os.path.exists(file):
-        try:
-            memories = json.loads(open(file).read())
-        except:
-            memories = []
-    memories.append({"date": str(datetime.now()), "you": you_said, "me": assistant_said})
-    open(file, "w").write(json.dumps(memories, indent=2))
+    memories = load_mind()
+    memories.append({
+        "date": str(datetime.now()),
+        "you": you_said,
+        "assistant": assistant_said
+    })
+    with open(MIND_FILE, "w") as f:
+        json.dump(memories, f, indent=2)
 
-def show_mind(keyword=""):
-    file = "cyber_project/memory.json"
-    if not os.path.exists(file):
-        print("Mind is still empty.")
+def show_mind():
+    memories = load_mind()
+    if not memories:
+        print("Mind is empty, bro.")
         return
-    memories = json.loads(open(file).read())
-    if keyword == "":
-        for m in memories[-5:]:
-            print(f"{m['date']} - You: {m['you']} | Me: {m['me']}")
-    else:
-        for m in memories:
-            if keyword.lower() in m["you"].lower() or keyword.lower() in m["me"].lower():
-                print(f"{m['date']} - You: {m['you']} | Me: {m['me']}")
+    for m in memories[-10:]:
+        print(f"{m['date']} | You: {m['you']} => {m['assistant']}")
+
+def search_web(query):
+    q = urllib.parse.quote(query)
+    url = f"https://duckduckgo.com/?q={q}"
+    try:
+        webbrowser.open(url)
+    except:
+        pass
+    return f"Searching: {query} -> {url}"
 
 slogans = ["strive to observe, build, test and secure"]
-quotes = ["test - nothing is unbreakable", "learn daily"]
+quotes = ["Observe, Build, Test and Secure - FIKSFC Master"]
 
-print("FIKSFC MINI ASSISTANT v5.0 - Mind that never forgets")
-print("Commands: slogan, quote, time, calc 5+8, mind, mind keyword, log text, bye")
+print("FIKSFC MINI ASSISTANT v6.0 - Mind that never forgets + search")
+print("Commands: slogan, quote, time, calc 5+8, mind, log text, search topic, bye")
 
 while True:
     q = input("fik> ").strip()
     if not q:
         continue
-
-    if q.lower() == "slogan":
-        print(slogans[0])
-        save_to_mind(q, slogans[0])
-
-    elif q.lower() == "quote":
+    if q.lower() == "bye":
+        print("Bye bro, mind saved.")
+        break
+    elif "slogan" in q.lower():
+        ans = random.choice(slogans)
+        print(ans)
+        save_to_mind(q, ans)
+    elif "quote" in q.lower():
         ans = random.choice(quotes)
         print(ans)
         save_to_mind(q, ans)
-
-    elif q.lower() == "time":
-        ans = f"Time now: {datetime.now()}"
+    elif "time" in q.lower():
+        ans = str(datetime.now())
         print(ans)
         save_to_mind(q, ans)
-
     elif q.lower().startswith("calc"):
         try:
-            expr = q[5:].strip().lower()
-            if not expr:
-                print("Usage: calc 5+8-2 or calc 300*4")
-            else:
-                expr = expr.replace("x", "*")
-                result = eval(expr)
-                ans = f"Result:{result}"
-                print(ans)
-                save_to_mind(q, ans)
+            expr = q[4:].strip()
+            ans = str(eval(expr))
+            print(ans)
+            save_to_mind(q, ans)
         except Exception as e:
-            print(f"Calc error: {e}")
-
-    elif q.lower() == "mind":
+            print(f"calc error: {e}")
+    elif q.lower().startswith("search"):
+        topic = q[6:].strip()
+        if not topic:
+            print("Tell me what to search, e.g., search FIKSFC")
+        else:
+            ans = search_web(topic)
+            print(ans)
+            save_to_mind(q, ans)
+    elif q.lower().startswith("mind"):
         show_mind()
-
-    elif q.lower().startswith("mind "):
-        show_mind(q[5:])
-
-    elif q.lower().startswith("log "):
-        text = q[4:]
-        open("cyber_project/DAILY_LOG.txt", "a").write(f"{datetime.now()} - {text}\n")
-        print("Logged.")
-        save_to_mind(q, "Logged to DAILY_LOG.txt")
-
-    elif q.lower() in ["bye", "exit", "quit"]:
-        print("Exiting - strive to observe, build, test and secure.")
-        break
-
+    elif q.lower().startswith("log"):
+        txt = q[3:].strip()
+        save_to_mind(txt, "logged")
+        print(f"logged: {txt}")
     else:
-        ans = f"Got it: {q} - saved to my mind"
+        ans = f"I got: {q} (saved to my mind)"
         print(ans)
         save_to_mind(q, ans)
