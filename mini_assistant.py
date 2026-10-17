@@ -1,4 +1,5 @@
-mpoirt datetime, random, json, os
+from datetime import date, time, datetime
+import random, json, os
 
 def save_to_mind(you_said, assistant_said):
     file = "cyber_project/memory.json"
@@ -10,7 +11,7 @@ def save_to_mind(you_said, assistant_said):
             memories = json.loads(open(file).read())
         except:
             memories = []
-    memories.append({"date": str(datetime.datetime.now()), "you": you_said, "me": assistant_said})
+    memories.append({"date": str(datetime.now()), "you": you_said, "me": assistant_said})
     open(file, "w").write(json.dumps(memories, indent=2))
 
 def show_mind(keyword=""):
@@ -48,7 +49,7 @@ while True:
         save_to_mind(q, ans)
 
     elif q.lower() == "time":
-        ans = f"Time now: {datetime.datetime.now()}"
+        ans = f"Time now: {datetime.now()}"
         print(ans)
         save_to_mind(q, ans)
 
@@ -74,7 +75,7 @@ while True:
 
     elif q.lower().startswith("log "):
         text = q[4:]
-        open("cyber_project/DAILY_LOG.txt", "a").write(f"{datetime.datetime.now()} - {text}\n")
+        open("cyber_project/DAILY_LOG.txt", "a").write(f"{datetime.now()} - {text}\n")
         print("Logged.")
         save_to_mind(q, "Logged to DAILY_LOG.txt")
 
