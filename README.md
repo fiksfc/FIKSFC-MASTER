@@ -1,27 +1,23 @@
-# FIKSFC-MASTER
-### Field Operations Security Fabrication Command
-**Kampala / Koboko - Uganda**
-**Motto: Observe, Build, Test, Secure**
+# FIKSFC-MASTER — Field Operations Security Fabrication Command
 
-Build Heavy Career, Not Small Toys.
+> **Motto: Observe, Build, Test, Secure**
+> Built from Kampala, Uganda | For Remote DevSecOps Operations
 
-## What is Inside?
-This is my main toolbox. Built with Python on Chromebook Linux.
+**Fikstella** is my field toolkit for building secure Python automation that works even on low-resource systems.
 
-- `master.py` - All-in-one security tools:
-    - flashing() - alert system
-    - poster() - banner / poster maker
-      
-    - security check - password strength
+### What is Inside?
 
-- `mini_assistant.py` - My first AI assistant that greets and talks
+This master command controls my 4 core modules:
 
-## Who is Builder?
-Founder: FIKSFC Heavy Base
-Learning and building openly. Open to interact with other builders.
+1.  **Assistant V6** — Main CLI assistant / command center
+2.  **Scanner** — Fast target recon & vulnerability scan
+3.  **Buster.py** — Directory & endpoint discovery
+4.  **Password Checker** — Security audit & strength analysis
 
-## Goal
-From Koboko to World - building cyber security and safety tools.
+### How to Run in 30 Seconds
 
----
-Heavy Base from scratch!
+```bash
+git clone https://github.com/YOUR-USERNAME/FIKSFC-MASTER.git
+cd FIKSFC-MASTER
+pip install -r requirements.txt
+python assistant_v6.py
