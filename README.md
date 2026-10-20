@@ -17,7 +17,7 @@ This master command controls my 4 core modules:
 ### How to Run in 30 Seconds
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/FIKSFC-MASTER.git
+git clone https://github.com/FIKSFC/FIKSFC-MASTER.git
 cd FIKSFC-MASTER
 pip install -r requirements.txt
 python assistant_v6.py
